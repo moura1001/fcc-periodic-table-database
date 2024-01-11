@@ -6,15 +6,12 @@ MAIN_MENU() {
   if [[ $1 =~ ^[0-9]+$ ]]
   then
     ELEMENT_INFO_RESULT=$($PSQL "SELECT atomic_number, e.symbol, e.name, t.type, p.atomic_mass, p.melting_point_celsius, p.boiling_point_celsius FROM elements AS e INNER JOIN properties AS p USING(atomic_number) INNER JOIN types AS t USING(type_id) WHERE atomic_number=$1")
-    echo "atomic_number"
   elif [[ $1 =~ ^[a-zA-Z]{1,2}$ ]]
   then
     ELEMENT_INFO_RESULT=$($PSQL "SELECT atomic_number, e.symbol, e.name, t.type, p.atomic_mass, p.melting_point_celsius, p.boiling_point_celsius FROM elements AS e INNER JOIN properties AS p USING(atomic_number) INNER JOIN types AS t USING(type_id) WHERE e.symbol ILIKE '$1'")
-    echo "symbol"
   elif [[ $(echo $1 | wc -m) -gt 2 && $1 =~ ^[a-zA-Z]+$ ]]
   then
     ELEMENT_INFO_RESULT=$($PSQL "SELECT atomic_number, e.symbol, e.name, t.type, p.atomic_mass, p.melting_point_celsius, p.boiling_point_celsius FROM elements AS e INNER JOIN properties AS p USING(atomic_number) INNER JOIN types AS t USING(type_id) WHERE e.name ILIKE '$1'")
-    echo "name"
   else
     echo "I could not find that element in the database."
     return
